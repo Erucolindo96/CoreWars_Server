@@ -1,4 +1,4 @@
-#ifndef CORECREATOR_HPP
+﻿#ifndef CORECREATOR_HPP
 #define CORECREATOR_HPP
 
 
@@ -14,6 +14,7 @@ namespace arbiter
     class Instruction;
     class Core;
     class Warrior;
+    class Observer;
 
     /**
      * Założenia: wojownicy mogą być co najwyżej wielkości połowy rdzenia. Jeśli którys z nich nie jest - rzucany jest wyjątek.
@@ -28,7 +29,7 @@ namespace arbiter
         typedef std::shared_ptr<Instruction> InsSharedPtr;
         typedef std::unique_ptr<Instruction> InsPtr;
         typedef std::unique_ptr<Core> CorePtr;
-        typedef std::unique_ptr<Observer> ObserverPtr;
+      //  typedef std::unique_ptr<Observer> ObserverPtr;
 
     public:
         CoreCreator(const unsigned int CORE_TO_CREATE_SIZE, const Warrior &warrior_1, const Warrior &warrior_2 );
@@ -54,7 +55,7 @@ namespace arbiter
          * @brief createCore() Tworzy rdzeń w postaci wektora Instrukcji
          * @return Wskazanie do utworzonego rdzenia
          */
-        virtual CorePtr createCore( ObserverPtr &obs_ptr) const = 0;
+        virtual CorePtr createCore( Observer &obs_ptr) const = 0;
         /**
          * @brief modifyCore Modyfikuje już istniejący rdzeń w odpowiedni sposób
          * @param existed_core_ptr Wskazanie do istniejącego już rdzenia

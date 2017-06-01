@@ -1,4 +1,4 @@
-#include "RealCoreCreators.hpp"
+﻿#include "RealCoreCreators.hpp"
 
 
 namespace arbiter
@@ -8,7 +8,7 @@ namespace arbiter
         CoreCreator(CORE_TO_CREATE_SIZE, warrior_1, warrior_2)
     {}
 
-    DATCreator::CorePtr DATCreator::createCore(ObserverPtr &obs_ptr)const
+    DATCreator::CorePtr DATCreator::createCore(Observer &obs_ptr)const
     {
         IntegerRegister FIRST_POS = countPositionWarrior1();//jesli rdzeń jest za mały dla wojowników - to te fcje rzucają wyjątek
         IntegerRegister SECOND_POD = countPositionWarrior2();

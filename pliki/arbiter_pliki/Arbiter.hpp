@@ -1,4 +1,4 @@
-#ifndef ARBITER_HPP
+﻿#ifndef ARBITER_HPP
 #define ARBITER_HPP
 
 #include<memory>
@@ -10,6 +10,8 @@
 #include "Warrior.hpp"
 #include "Observer.hpp"
 
+#include<chrono>
+#include<QTimer>
 namespace arbiter
 {
 
@@ -39,7 +41,7 @@ class Arbiter
 public:
     typedef std::unique_ptr<Core> CorePtr;
     typedef std::unique_ptr<CoreCreator> CoreCreatorPtr;
-    typedef std::unique_ptr<Observer> ObserverPtr;
+    //typedef Observer ObserverPtr;
 
 
     /**
@@ -49,7 +51,7 @@ public:
      * @param obs_ptr Wskazanie na obserwatora, rejestrującego zmiany w rdzeniu.
      * @param core_creator Obiekt tworzący rdzeń według zadanych przez użytkownika parametrów.
      */
-    Arbiter(ObserverPtr &obs_ptr, CoreCreatorPtr core_creator);
+    Arbiter(Observer &obs_ptr, CoreCreatorPtr core_creator);
 
     /**
      * @brief executeNextInstruction Zleca wykonanie następnej instrukcji.
@@ -69,6 +71,7 @@ private:
      */
     void createCore(const CoreCreatorPtr &core_creator);
 
+    unsigned int cnt;
 
     Arbiter() = delete;
 
@@ -76,7 +79,7 @@ private:
     CorePtr core_ptr_ ;
     Processor processor_;
     QueueManager manager_;//zarządza kolejkami procesów
-    ObserverPtr &observer_ptr_;
+    Observer &observer_ptr_;
 
 };
 

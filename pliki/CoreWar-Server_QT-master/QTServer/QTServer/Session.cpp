@@ -47,6 +47,9 @@ void Session::sendBoard()
 
 	sendMesage(block);
 
+    WINNER winner = startGame();
+
+    sendWinner(winner);
 }
 
 
@@ -63,34 +66,58 @@ void Session::actualizeBoard(int address, QString inst)
 	sendMesage(block);
 }
 
+void Session::sendWinner(WINNER winner)
+{
+    QByteArray block;
+    QDataStream out(&block, QIODevice::WriteOnly);
+    out.setVersion(QDataStream::Qt_4_0);
+    QString result;
+
+    switch(winner)
+    {
+        case FIRST:
+        result = "Wygrał gracz nr 1";
+        break;
+
+        case SECOND:
+        result = "Wygrał gracz nr 2";
+        break;
+
+        case NONE:
+        result = "Remis";
+
+    }
+
+    out << (qint16)5;
+    out << result;
+
+    sendMesage(block);
+}
+
 void Session::sendMesage(QByteArray &message)
 {
-
+    cout << "Wysylam wiadomosc";
 	client_1->write(message);
 	client_2->write(message);
+
 
 }
 WINNER Session::startGame()
 {
-    const unsigned  int CORE_SIZE = 10;
+    parseWarriors();//tworzy wojowników na podstawie wysłanych przez klientów kodów
+    Warrior war_1 = real_war1, war_2 = real_war2;
 
-    IntegerRegister zero(CORE_SIZE, 0);
-    IntegerRegister one(CORE_SIZE, 1);
-    unique_ptr<Instruction> mov_ins(new MOVInstruction(unique_ptr<Operand>(new DirectOperand(zero) ), unique_ptr<Operand>(new DirectOperand(one) ) )  );
+    std::unique_ptr<CoreCreator> creator(new DATCreator(core, war_1, war_2 ) );
+    Arbiter sedzia(*this, std::move(creator) );
 
-    Warrior war_1, war_2;
-    war_1.addInstruction(mov_ins);
-    war_2.addInstruction(mov_ins);
+    unsigned int i = 0;
 
-    std::unique_ptr<Observer> moke_obs_ptr(new MokeObserver());
-    std::unique_ptr<CoreCreator> creator(new DATCreator(CORE_SIZE, war_1, war_2 ) );
-    Arbiter sedzia(moke_obs_ptr,std::move(creator) );
-
-    while(sedzia.executeNextInstruction())
-    {}
+    while(sedzia.executeNextInstruction() && i<MAX_ITERATIONS)
+    {
+    ++i;
+    }
 
     return sedzia.getWinner();
-
 }
 
 
@@ -107,4 +134,16 @@ void Session::update(const IntegerRegister &mod_ins_ptr)
         ins_name = "DAT";
     }
     actualizeBoard(mod_ins_ptr.getValue(), ins_name);
+}
+void Session::parseWarriors()
+{//na razie nie zważa na przesłane przez klientów dane
+    //tylko na sztywno wpisuje MOV 0 1
+
+    IntegerRegister zero(core, 0);
+    IntegerRegister one(core, 1);
+    unique_ptr<Instruction> mov_ins(new MOVInstruction(unique_ptr<Operand>(new DirectOperand(zero) ), unique_ptr<Operand>(new DirectOperand(one) ) )  );
+
+    real_war1.addInstruction(mov_ins);
+    real_war2.addInstruction(mov_ins);
+
 }

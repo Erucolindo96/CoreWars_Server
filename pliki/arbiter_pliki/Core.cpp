@@ -5,9 +5,9 @@ namespace arbiter
 {
 
 //public
-    Core::Core(std::unique_ptr<Observer> &obs_ptr):core_memory_(), mutex_(), observer_ptr_(obs_ptr)
+    Core::Core(Observer &obs_ptr):core_memory_(), mutex_(), observer_ptr_(obs_ptr)
     {
-        obs_ptr->setCorePtr(this);
+        obs_ptr.setCorePtr(this);
     }
 
 //    Core::Core(const Core &other): core_memory_(other.core_memory_), mutex_(), observer_ptr_(other.observer_ptr_)
@@ -69,7 +69,7 @@ namespace arbiter
 
     void Core::notifyObserver(const IntegerRegister &modified_ins)
     {
-        observer_ptr_->update(modified_ins);
+        observer_ptr_.update(modified_ins);
     }
 
 

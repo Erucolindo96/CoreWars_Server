@@ -35,7 +35,7 @@ private:
      */
     void parseWarriors();
 
-
+    const unsigned int MAX_ITERATIONS = 100;
 	int core;		//wielkoœæ rdzenia w grze dla danej sesji
 	int turns;		//iloœæ tur w grze dla danej sesji
 	QString name;	//nazwa sesji
@@ -65,6 +65,10 @@ private:
 	*/
 	void sendMesage(QByteArray &message);
 	
+    void sendWinner(WINNER winner);
+
+
+
 
 };
 

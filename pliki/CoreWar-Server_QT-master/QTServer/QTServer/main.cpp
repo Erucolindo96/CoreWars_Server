@@ -4,6 +4,9 @@
 #include"pliki/arbiter_pliki/RealInstructions.hpp"
 #include"pliki/arbiter_pliki/RealCoreCreators.hpp"
 #include<iostream>
+
+#include"pliki/CoreWar-Server_QT-master/QTServer/QTServer/MyServer.h"
+#include<QApplication>
 using namespace arbiter ;
 using namespace std;
 
@@ -19,7 +22,7 @@ public:
 
 
 int main(int argc, char *argv[])
-{
+{/*
     const unsigned  int CORE_SIZE = 10;
 
     IntegerRegister zero(CORE_SIZE, 0);
@@ -30,14 +33,24 @@ int main(int argc, char *argv[])
     war_1.addInstruction(mov_ins);
     war_2.addInstruction(mov_ins);
 
-    std::unique_ptr<Observer> moke_obs_ptr(new MokeObserver());
+    MokeObserver moke;
+    //std::unique_ptr<Observer> moke_obs_ptr(new MokeObserver());
     std::unique_ptr<CoreCreator> creator(new DATCreator(CORE_SIZE, war_1, war_2 ) );
-    Arbiter sedzia(moke_obs_ptr,std::move(creator) );
+    Arbiter sedzia(moke,std::move(creator) );
 
-    while(sedzia.executeNextInstruction())
-    {}
-
-
-
+    int i=0;
+    const int MAX_ITER = 100;
+    while(sedzia.executeNextInstruction() && i<MAX_ITER)
+    {
+        ++i;
+    }
+    cout<<sedzia.getWinner();
+*/
+    QApplication a(argc, argv);
+    //QTServer w;
+    //w.show();
+    MyServer server;
+    server.startServer();
+    return a.exec();
     return 0;
 }

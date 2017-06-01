@@ -34,7 +34,7 @@ namespace arbiter
         typedef std::unique_ptr<Core> CorePtr;
 
 
-        Core(std::unique_ptr<Observer> &obs_ptr);
+        Core(Observer &obs_ptr);
 
 //        Core(const Core &other);
 
@@ -94,7 +94,7 @@ namespace arbiter
     private:
         std::vector<InsPtr> core_memory_;
         mutable std::mutex mutex_;
-        std::unique_ptr<Observer> &observer_ptr_;
+        Observer &observer_ptr_;
 
         friend class CoreCreator;
         friend class Observer;
