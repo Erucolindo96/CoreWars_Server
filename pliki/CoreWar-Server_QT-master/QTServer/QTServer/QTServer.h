@@ -1,6 +1,7 @@
-#pragma once
+﻿#pragma once
 
-#include <QtWidgets/QMainWindow>
+
+//#include <QtWidgets/QMainWindow>
 #include "ui_QTServer.h"
 
 class QTServer : public QMainWindow
@@ -8,7 +9,7 @@ class QTServer : public QMainWindow
 	Q_OBJECT
 
 public:
-	QTServer(QWidget *parent = Q_NULLPTR);
+    QTServer(QWidget *parent = nullptr);
 
 private:
 	Ui::QTServerClass ui;

@@ -8,6 +8,12 @@
 #include"pliki/arbiter_pliki/RealInstructions.hpp"
 #include"pliki/arbiter_pliki/RealCoreCreators.hpp"
 #include<iostream>
+#include<chrono>
+#include<thread>
+#include<sstream>
+#include"pliki/arbiter_pliki/WarriorFactory.hpp"
+
+#include"pliki/qstringconverter.hpp"
 using namespace arbiter ;
 using namespace std;
 
@@ -29,11 +35,8 @@ private:
 
     virtual void update(const IntegerRegister &mod_ins_ptr);
 
-    /**
-     * @brief parseWarriors Na razie przypisuje, niezale?nie od przys?anych od klienta wojowników,
-     * obydwu wojom MOV 0 1
-     */
-    void parseWarriors();
+
+
 
     const unsigned int MAX_ITERATIONS = 100;
 	int core;		//wielkoœæ rdzenia w grze dla danej sesji
@@ -44,6 +47,8 @@ private:
 	QString defaultInstruction;		//domyœlna instruckja w rdzeniu
 
     Warrior real_war1, real_war2;
+
+
 
 	QTcpSocket* client_1;		//gniazdo tcp klienta 1
 	QTcpSocket* client_2;		//gniazdo tcp klienta 2

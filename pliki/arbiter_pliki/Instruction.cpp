@@ -12,8 +12,13 @@ namespace arbiter
     Instruction::Instruction():operand_A_(), operand_B_(), opcode_()
     {}
 
-    Instruction::Instruction(const Instruction &other): operand_A_(other.operand_A_->clone()), operand_B_(other.operand_B_->clone()), opcode_(other.opcode_)
-    {}
+    Instruction::Instruction(const Instruction &other): operand_A_(), operand_B_(), opcode_(other.opcode_)
+    {
+        if(other.operand_A_.get() != nullptr)
+            operand_A_ = other.operand_A_->clone();
+        if(other.operand_B_.get() != nullptr)
+            operand_B_ = other.operand_B_->clone();
+    }
 
     Instruction::Instruction(const OperandPtr &operand_A, const OperandPtr &operand_B): operand_A_(operand_A->clone()), operand_B_(operand_B->clone())
     {}

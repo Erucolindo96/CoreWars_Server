@@ -468,7 +468,12 @@ namespace arbiter
 
     ExecutionLog SPLInstruction::execute(CorePtr &core, const IntegerRegister &instruction_PC)
     {
-        throw std::runtime_error("TODO");
+        IntegerRegister next_pc=instruction_PC;
+        ++next_pc;
+        Core::InsPtr &ins = core->getInstructionRef(instruction_PC);
+        IntegerRegister next_pc_new_proc = ins->getOperandARef()->countArgument(core, instruction_PC);
+        return ExecutionLog(next_pc, next_pc_new_proc, true, true);
+
     }
 
     Instruction::InsPtr SPLInstruction::clone()const

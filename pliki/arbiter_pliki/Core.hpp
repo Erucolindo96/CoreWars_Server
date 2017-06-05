@@ -99,6 +99,7 @@ namespace arbiter
         friend class CoreCreator;
         friend class Observer;
         friend class DATCreator;
+        friend class DefInsCreator;
 
        // Core& getReferenceOfCore();
 
