@@ -11,7 +11,7 @@
 #include "Observer.hpp"
 
 #include<chrono>
-#include<QTimer>
+//#include<QTimer>
 namespace arbiter
 {
 

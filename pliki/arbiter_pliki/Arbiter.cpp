@@ -10,7 +10,7 @@ namespace arbiter
     core_ptr_(),processor_(core_ptr_, core_creator->getCoreSize() ),
     manager_(core_creator->getCoreSize()),observer_ptr_(obs_ptr)
     {
-        cnt = 0;
+     //   cnt = 0;
         //tworzymy rdzeń
         core_ptr_ = core_creator->createCore(obs_ptr);
         //tworzymy początkowe procesy graczy
@@ -25,6 +25,7 @@ namespace arbiter
 
     bool Arbiter::executeNextInstruction()
     {
+        //QTimer timer;
     //sprawdzamy na wszelki wielki, czy w ogole jakies procesy zostały w kolejce
         if(!manager_.checkIfAny2WarriorsExist() )
             throw std::runtime_error("Arbiter - Zlecono wykonanie pomimo braku procesów do wykonania");
@@ -40,25 +41,8 @@ namespace arbiter
         if(log.is_proc_split_)
             manager_.addProcessToActualWarrior(log.next_pc_new_proc_);
 
-        if(cnt%2 == 1)
-        {
-            sleep(1);
-            std::cout<<"Czekam sekunde"<<std::endl;
-        }
-        else
-        {
-
-            std::cout<<"Nie czekam sekundy"<<std::endl;
-        }
-
-        ++cnt;
         return manager_.checkIfAny2WarriorsExist();
-/*
-        if(manager_.checkIfAny2WarriorsExist() )
-            return false;
 
-        return true;
-  */
   }
 
     WINNER Arbiter::getWinner()const
