@@ -11,7 +11,7 @@ QT       += core gui network widgets
 TARGET = CoreWars_Server
 TEMPLATE = app
 
-QMAKE_CXXFLAGS += -std=c++11 #dodane przeze mnie
+#QMAKE_CXXFLAGS += -std=c++11 #dodane przeze mnie
 
 SOURCES += \
     pliki/CoreWar-Server_QT-master/QTServer/QTServer/main.cpp \

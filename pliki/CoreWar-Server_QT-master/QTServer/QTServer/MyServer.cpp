@@ -7,6 +7,8 @@ MyServer::MyServer(QObject *parent)
 	: QTcpServer(parent)
 {
 	connect(this, SIGNAL(newConnection()), this, SLOT(slotNewConnection()));
+    timer = new QTimer();
+    n = 0;
 }
 
 void MyServer::sendToAllConnections(QByteArray &message)
@@ -87,10 +89,10 @@ void MyServer::readyRead()
 void MyServer::createSession(QTcpSocket * sock, int core, int turn, QString ins, QString warrior1, QString name)
 {
 
-	QMap<QString, Session*>::const_iterator i = sessions.find(name);
+    QMap<QString, Session*>::const_iterator i = sessions.find(name);
 	if (i == sessions.end()) 
 	{
-		Session* session = new Session(core, turn, warrior1, ins, sock, name);
+        Session* session = new Session(core, turn, warrior1, ins, sock, name);
 		this->sessions.insert(name, session);
 	}
 
@@ -111,10 +113,14 @@ void MyServer::createSession(QTcpSocket * sock, int core, int turn, QString ins,
 
 void MyServer::addPlayer(QTcpSocket *sock, QString warrior2, QString name)
 {
-	QMap<QString, Session*>::const_iterator i = sessions.find(name);
+    QMap<QString, Session*>::const_iterator i = sessions.find(name);
 
-	if(!this->sessions[name]->isFull)
+    if(!this->sessions[name]->isFull){
 		this->sessions[name]->addClient2(warrior2, sock);
+        timer->start(1000);
+        connect(timer, SIGNAL(timeout()), this, SLOT(sendActualInstruction()));
+
+    }
 
 	else if (i == sessions.end())
 	{
@@ -155,5 +161,15 @@ void MyServer::slotNewConnection()
 		clientConnections.append(clientConnection);
 		connect(clientConnection, SIGNAL(readyRead()), this, SLOT(readyRead()));
 	}
+}
+
+void MyServer::sendActualInstruction()
+{
+    if(this->n < this->sessions["abc"]->tmpInstruction.size())
+        this->sessions["abc"]->sendActualInstruction(n);
+    else{
+        this->timer->stop();
+        this->sessions["abc"]->sendWinner(this->sessions["abc"]->winner);
+    }
 }
 

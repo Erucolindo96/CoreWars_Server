@@ -2,6 +2,7 @@
 #include <qstring.h>
 #include <qtcpsocket.h>
 #include <qdatastream.h>
+#include <chrono>
 
 #include"pliki/arbiter_pliki/Arbiter.hpp"
 #include<memory>
@@ -11,18 +12,39 @@
 using namespace arbiter ;
 using namespace std;
 
+struct TmpInstruction
+{
+   int addr;
+   QString ins;
+
+
+   TmpInstruction(int a, QString s)
+   {
+       addr = a;
+        ins = s;
+   }
+
+};
+
 class Session : public Observer
 {
 public:
-	Session(int c, int t, QString w1, QString def, QTcpSocket* s1, QString n);
+    Session(int c, int t, QString w1, QString def, QTcpSocket* s1, QString n);
 	~Session();
 	bool isFull;		//pole okreœlaj¹ce czy gracz mo¿e do³¹czyæ do sesji
 
+    vector<TmpInstruction> tmpInstruction;
+    WINNER winner;
 
 	/**
 	* @brief Metoda dodaj¹ca gracza 2 do istniej¹cej sesji
 	*/
 	void addClient2(QString w2, QTcpSocket* s1);
+
+    void sendWinner(WINNER winner);
+
+public slots:
+    void sendActualInstruction(int &n);
 	
 
 private:
@@ -49,25 +71,29 @@ private:
 	QTcpSocket* client_2;		//gniazdo tcp klienta 2
 
 
+
+
     WINNER startGame();
 	/**
 	* @brief Metoda tworz¹ca wiadomoœæ o pocz¹tkowej planszy
 	*/
 	void sendBoard();
 
-	/**
-	* @brief Metoda tworz¹ca wiadomoœæ do aktualizacji planszy
-	*/
-	void actualizeBoard(int address, QString inst);
+    /**
+    * @brief Metoda tworz¹ca wiadomoœæ do aktualizacji planszy
+    */
+    void actualizeBoard(int address, QString inst);
 
 	/**
 	* @brief Metoda wysy³aj¹ca wiadomoœæ do klientów sesji
 	*/
 	void sendMesage(QByteArray &message);
 	
-    void sendWinner(WINNER winner);
 
 
+private slots:
+
+    void sendAllInstructions();
 
 
 };

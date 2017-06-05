@@ -3,6 +3,7 @@
 
 
 
+
 Session::Session(int c, int t, QString w1, QString def, QTcpSocket* s1, QString n)
 {
 	core = c;
@@ -28,7 +29,9 @@ void Session::addClient2(QString w2, QTcpSocket* s2)
 	client_2 = s2;
 	isFull = true;
 
-	sendBoard();
+    winner = startGame();
+
+    //sendWinner(winner);
 
 }
 
@@ -47,9 +50,9 @@ void Session::sendBoard()
 
 	sendMesage(block);
 
-    WINNER winner = startGame();
+    //WINNER winner = startGame();
 
-    sendWinner(winner);
+    //sendWinner(winner);
 }
 
 
@@ -92,6 +95,7 @@ void Session::sendWinner(WINNER winner)
     out << result;
 
     sendMesage(block);
+    qDebug() << "Wyslelem wynik";
 }
 
 void Session::sendMesage(QByteArray &message)
@@ -116,7 +120,11 @@ WINNER Session::startGame()
     {
     ++i;
     }
+    qDebug() << tmpInstruction.size();
 
+    sendBoard();
+
+    sendAllInstructions();
     return sedzia.getWinner();
 }
 
@@ -133,7 +141,9 @@ void Session::update(const IntegerRegister &mod_ins_ptr)
     {
         ins_name = "DAT";
     }
-    actualizeBoard(mod_ins_ptr.getValue(), ins_name);
+    //actualizeBoard(mod_ins_ptr.getValue(), ins_name);
+    tmpInstruction.push_back(TmpInstruction(mod_ins_ptr.getValue(), ins_name));
+
 }
 void Session::parseWarriors()
 {//na razie nie zważa na przesłane przez klientów dane
@@ -147,3 +157,20 @@ void Session::parseWarriors()
     real_war2.addInstruction(mov_ins);
 
 }
+
+void Session::sendAllInstructions()
+{
+    for(int i=0; i < tmpInstruction.size(); ++i)
+    {
+        actualizeBoard(tmpInstruction[i].addr, tmpInstruction[i].ins);
+    }
+
+}
+
+
+void Session::sendActualInstruction(int &n)
+{
+    actualizeBoard(tmpInstruction[n].addr, tmpInstruction[n].ins);
+    ++n;
+}
+

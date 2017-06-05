@@ -5,6 +5,7 @@
 #include <QTcpServer>
 #include "Session.h"
 #include <qdatastream.h>
+#include <QTimer>
 
 class MyServer : public QTcpServer
 {
@@ -13,6 +14,9 @@ public:
 	MyServer(QObject *parent = 0);
 	void sendToAllConnections(QByteArray& message);
 	void startServer();
+    QTimer* timer;
+
+
 
 	private slots:
 	/**
@@ -25,9 +29,12 @@ public:
 	*/
 	void readyRead();
 
+    void sendActualInstruction();
+
 private:
 	QList<QTcpSocket*> clientConnections;	//lista wszystkich graczy pod³¹czonych do serwera
-	QMap<QString, Session*> sessions;		//s³ownik aktualnie trwaj¹cych sesji gry
+    QMap<QString, Session*> sessions;		//s³ownik aktualnie trwaj¹cych sesji gry
+    int n;
 
 	/**
 	* @brief Metoda tworz¹ca now¹ sesjê gry
@@ -38,6 +45,7 @@ private:
 	* @brief Metoda dodaj¹ca drugiego gracza do sesji i rozpoczynaj¹ca grê
 	*/
 	void addPlayer(QTcpSocket* sock, QString warrior2, QString name);
+
 };
 
 
